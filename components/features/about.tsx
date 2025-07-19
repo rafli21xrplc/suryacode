@@ -17,34 +17,43 @@ export const About = () => {
   };
 
   return (
-    <section className="text-white px-6 py-16">
-      <div className="container mx-auto flex justify-around items-start flex-col lg:flex-row gap-12 lg:gap-36">
-        <div className="flex items-start">
-          <button
-            onClick={handleCopy}
-            className="flex items-center gap-3 text-left p-2 rounded-lg transition-colors duration-300"
-          >
-            <h1 className="text-xl font-semibold">{email}</h1>
-            {isCopied ? (
-              <Check className="h-5 w-5 text-green-400" />
-            ) : (
-              <Copy className="h-5 w-5 text-gray-400" />
-            )}
-          </button>
-        </div>
+    <section id="about" className="text-white px-6 py-20 sm:py-24">
+      <div className="container mx-auto">
 
-         <div>
-            <p className="text-2xl font-light leading-relaxed">
-              With a strong educational background in{' '}
-              <strong className="bg-orange-500/20 text-orange-300 font-semibold px-2 py-1 rounded-md transition-all duration-300">
+        <div className="flex flex-col md:flex-row items-start justify-center gap-12 md:gap-16">
+          <div className="w-full md:w-auto">
+            <button
+              onClick={handleCopy}
+              className="flex w-full items-center gap-3 rounded-lg border border-transparent p-3 text-left transition-all duration-300 hover:border-gray-700 hover:bg-gray-800/50 md:w-auto"
+            >
+              <h3 className="text-lg font-semibold sm:text-xl">{email}</h3>
+              {isCopied ? (
+                <Check className="h-5 w-5 flex-shrink-0 text-green-400" />
+              ) : (
+                <Copy className="h-5 w-5 flex-shrink-0 text-gray-400" />
+              )}
+            </button>
+          </div>
+
+          <div className="flex-1 max-w-4xl">
+            <p className="text-lg font-light leading-relaxed text-gray-300 md:text-xl">
+              With a strong educational background in{" "}
+              <strong className="rounded-md bg-orange-500/20 px-2 py-1 font-semibold text-orange-300">
                 Software Development
-              </strong>
-              {' '}and a focus on{' '}
-              <strong className="bg-orange-500/20 text-orange-300 font-semibold px-2 py-1 rounded-md transition-all duration-300">
+              </strong>{" "}
+              and a focus on{" "}
+              <strong className="rounded-md bg-orange-500/20 px-2 py-1 font-semibold text-orange-300">
                 Fullstack and Mobile Development
               </strong>
-              {' '}, my career is driven by a commitment to delivering high-quality digital solutions. I have a solid understanding of key programming concepts such as MVC architecture and SOLID principles, which allow me to create scalable, maintainable, and efficient applications. My success is reflected in the effectiveness, performance, and user satisfaction of the platforms I develop, showcasing my dedication to innovation and quality.
+              , my career is driven by a commitment to delivering high-quality
+              digital solutions. I have a solid understanding of key programming
+              concepts such as MVC architecture and SOLID principles, which allow
+              me to create scalable, maintainable, and efficient applications.
+              My success is reflected in the effectiveness, performance, and
+              user satisfaction of the platforms I develop, showcasing my
+              dedication to innovation and quality.
             </p>
+          </div>
         </div>
       </div>
     </section>

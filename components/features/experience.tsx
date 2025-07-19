@@ -1,15 +1,13 @@
-// components/Experience.js
 "use client";
 
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { CardBody, CardContainer, CardItem } from '../ui/3D-card';
-// Impor komponen 3D Card
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Tipe data diperbarui dengan properti 'imageUrl'
+// Type definition remains the same
 type ExperienceItem = {
     date: string;
     role: string;
@@ -17,10 +15,10 @@ type ExperienceItem = {
     description: string[];
     alignment: 'left' | 'right';
     labels: string[];
-    imageUrl?: string; 
+    imageUrl?: string;
 };
 
-// Data pengalaman diperbarui dengan imageUrl untuk setiap entri
+// Experience data remains the same
 const experiences: ExperienceItem[] = [
     {
         date: 'Februari 2025 - Present',
@@ -102,6 +100,7 @@ const experiences: ExperienceItem[] = [
     },
 ];
 
+// The MacbookFrame component remains the same
 const MacbookFrame = ({ imageUrl, altText }: { imageUrl: string; altText: string }) => {
     return (
         <div className="mt-5 rounded-lg border border-gray-700/50 bg-gray-900/50 p-2 shadow-2xl shadow-black/30">
@@ -111,7 +110,7 @@ const MacbookFrame = ({ imageUrl, altText }: { imageUrl: string; altText: string
                 <div className="h-2.5 w-2.5 rounded-full bg-green-500"></div>
             </div>
             <div className="overflow-hidden rounded-b-md">
-                 <img
+                <img
                     src={imageUrl}
                     alt={altText}
                     className="w-full h-auto object-cover"
@@ -121,8 +120,11 @@ const MacbookFrame = ({ imageUrl, altText }: { imageUrl: string; altText: string
     );
 };
 
-// UPDATE: Komponen ExperienceCard sekarang menggunakan 3D Card
-const ExperienceCard = ({ item }: { item: ExperienceItem }) => {
+// ## Refactored `ExperienceCard` for Responsiveness
+const ExperienceCard = ({ item, isMobile }: { item: ExperienceItem, isMobile: boolean }) => {
+    // On mobile, force alignment to the right for a consistent single-column layout
+    const alignment = isMobile ? 'right' : item.alignment;
+
     const cardContent = (
         <CardContainer containerClassName="py-0">
             <CardBody className="bg-gray-800/40 backdrop-blur-lg w-auto h-auto rounded-lg shadow-lg border border-gray-700/50 p-6 relative group/card">
@@ -156,27 +158,44 @@ const ExperienceCard = ({ item }: { item: ExperienceItem }) => {
     );
 
     return (
-        <div className="flex justify-between items-center w-full experience-card">
-            <div className="w-5/12 left-pane">
-                {item.alignment === 'left' && cardContent}
+        // The main container is now responsive
+        <div className="flex justify-between items-start w-full experience-card">
+            {/* Left Pane: Shows only on larger screens if alignment is 'left' */}
+            <div className="hidden md:block md:w-5/12">
+                {alignment === 'left' && cardContent}
             </div>
-            <div className="relative w-1/12 flex justify-center">
+            
+            {/* Timeline Centerpiece */}
+            <div className="relative w-full md:w-1/12 flex justify-center">
                 <div className="h-4 w-4 bg-white rounded-full z-10 timeline-circle"></div>
+                {/* The vertical line is now part of the parent grid, not here. */}
             </div>
-            <div className="w-5/12 right-pane">
-                {item.alignment === 'right' && cardContent}
+
+            {/* Right Pane: Shows for 'right' alignment on desktop, and for ALL cards on mobile */}
+            <div className="w-full md:w-5/12">
+                 {alignment === 'right' && cardContent}
             </div>
         </div>
     );
 };
 
-
+// ## Refactored `Experience` Component
 const Experience = () => {
     const sectionRef = useRef(null);
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
 
     const visibleExperiences = isExpanded ? experiences : experiences.slice(0, 3);
 
+    // Effect for checking screen size
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+    
+    // Effect for GSAP animations
     useEffect(() => {
         const ctx = gsap.context(() => {
             gsap.to(".timeline-circle", {
@@ -190,11 +209,14 @@ const Experience = () => {
 
             const cards = gsap.utils.toArray('.experience-card');
             cards.forEach((card: any) => {
-                const isRight = card.querySelector('.right-pane').children.length > 0;
+                // Determine animation direction based on screen size and alignment
+                const isRightAligned = card.children[2]?.children.length > 0;
                 
                 gsap.from(card, {
                     opacity: 0,
-                    x: isRight ? 100 : -100,
+                    // On mobile (single column), all cards slide in from the right
+                    // On desktop, they slide from left or right based on alignment
+                    x: isMobile ? 100 : (isRightAligned ? 100 : -100),
                     duration: 0.8,
                     ease: 'power3.out',
                     scrollTrigger: {
@@ -211,7 +233,7 @@ const Experience = () => {
         }, sectionRef);
 
         return () => ctx.revert();
-    }, [isExpanded]);
+    }, [isExpanded, isMobile]);
 
     return (
         <section ref={sectionRef} className="text-white py-20 px-4 sm:px-6 lg:px-8 overflow-x-hidden">
@@ -221,11 +243,15 @@ const Experience = () => {
                     <h2 className="text-4xl md:text-5xl font-bold mt-2">Work Experiences</h2>
                 </div>
 
+                {/* The main timeline container */}
                 <div className="relative">
-                    <div className="absolute left-1/2 h-full w-0.5 bg-gray-700 transform -translate-x-1/2"></div>
-                    <div className="space-y-16">
+                    {/* The vertical timeline bar, now hidden on mobile */}
+                    <div className="absolute left-1/2 h-full w-0.5 bg-gray-700 transform -translate-x-1/2 hidden md:block"></div>
+                    
+                    {/* The container for the experience cards */}
+                    <div className="space-y-8 md:space-y-16">
                         {visibleExperiences.map((exp, index) => (
-                            <ExperienceCard key={index} item={exp} />
+                            <ExperienceCard key={index} item={exp} isMobile={isMobile} />
                         ))}
                     </div>
                 </div>

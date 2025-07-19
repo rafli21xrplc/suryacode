@@ -10,9 +10,9 @@ export const Header = () => {
 
   return (
     <header className="text-white px-6 py-16">
+      <div className="container mx-auto flex justify-around items-start flex-row flex-wrap relative">
       <Spotlight />
       <Spotlight />
-      <div className="container mx-auto flex justify-around items-start flex-row flex-wrap">
         <div className="flex items-start space-x-4 flex-col  gap-2">
           <div>
             <h1 className="text-9xl font-bold">SURYA</h1>
@@ -23,7 +23,7 @@ export const Header = () => {
           <div>
             <div className="flex justify-center items-center">
               <div className="text-4xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-                as a{' '}<FlipWords words={words} /> <br />
+                I can handle it as{' '}<FlipWords words={words} /> <br />
               </div>
             </div>
           </div>

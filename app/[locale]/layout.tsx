@@ -18,7 +18,7 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider>
-      <div className="min-h-screen bg-black">
+      <div className="min-h-screen bg-black overflow-hidden">
         <Navbar />
         {children}
         <Footer />
