@@ -11,7 +11,7 @@ export function Footer() {
           </div>
 
           <div className="text-center">
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 justify-center">
               <p>Malang, Indonesia</p>
             </div>
           </div>
@@ -21,20 +21,23 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="my-16">
+        <div className="my-8">
           <MaskContainer
             revealText={
               <p className="mx-auto max-w-4xl text-center text-2xl font-bold md:text-4xl">
-                The first rule of MRR Club is you do not talk about MRR Club.
-                The second rule of MRR Club is you DO NOT talk about MRR Club.
+                My track record in process optimization has proven successful in
+                increasing team efficiency by 20%. I'm confident I can apply
+                this strategic expertise to boost productivity and support your
+                growth goals.
               </p>
             }
             className="rounded-md"
           >
-            Discover the power of{" "}
-            <span className="text-blue-500">Tailwind CSS v4</span> with native
-            CSS variables and container queries with{" "}
-            <span className="text-blue-500">advanced animations</span>.
+            My expertise extends beyond{" "}
+            <span className="text-blue-500">
+              technical expertise to a collaborative
+            </span>{" "}
+            spirit that fosters innovative solutions.
           </MaskContainer>
         </div>
 

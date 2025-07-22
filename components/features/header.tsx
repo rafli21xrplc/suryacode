@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image";
 import { BackgroundLines } from "../ui/BackgroundLines";
 import { FlipWords } from "../ui/FlipWords";
 import { Spotlight } from "../ui/spotlight";
@@ -30,7 +31,16 @@ export const Header = () => {
         </div>
         <div>
           {/* <BackgroundLines className="bg-transparent"> */}
-          <div className="w-40 h-40 rounded-full bg-white"></div>
+          {/* <div className="w-40 h-40 rounded-full bg-white"></div> */}
+          <div>
+            <Image
+              src="/images/profile.png"
+              alt="Surya Rafliansyah"
+              width={300}
+              height={300}
+              className="rounded-full shadow-lg z-10"
+              />
+          </div>
           {/* </BackgroundLines> */}
         </div>
       </div>

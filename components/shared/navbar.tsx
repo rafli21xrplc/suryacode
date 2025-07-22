@@ -6,16 +6,12 @@ import { HoverBorderGradient } from "../ui/BorderButtom";
 const variants = [
   {
     name: "Linkedin",
-    href: "/linkedin",
+    href: "https://www.linkedin.com/in/surya-rafli/",
   },
   {
     name: "Instagram",
-    href: "/instagram",
-  },
-  {
-    name: "More",
-    href: "/more",
-  },
+    href: "/https://www.instagram.com/surya.rafliansyah?igsh=MXVuaG96MzUyNG41bQ==",
+  }
 ];
 export const Navbar = () => {
   return (

@@ -12,13 +12,13 @@ type Logo = {
 };
 
 const localTechLogos: Logo[] = [
-    // Logo yang sudah ada
     { image: { url: 'https://cdn.simpleicons.org/nextdotjs/FFFFFF' }, altText: 'Next.js' },
     { image: { url: 'https://cdn.simpleicons.org/react/61DAFB' }, altText: 'React' },
     { image: { url: 'https://cdn.simpleicons.org/tailwindcss/06B6D4' }, altText: 'Tailwind CSS' },
     { image: { url: 'https://cdn.simpleicons.org/typescript/3178C6' }, altText: 'TypeScript' },
     { image: { url: 'https://cdn.simpleicons.org/nodedotjs/339933' }, altText: 'Node.js' },
     { image: { url: 'https://cdn.simpleicons.org/vuedotjs/4FC08D' }, altText: 'Vue.js' },
+     { image: { url: 'https://cdn.simpleicons.org/python/3776AB' }, altText: 'Python' },
     { image: { url: 'https://cdn.simpleicons.org/graphql/E10098' }, altText: 'GraphQL' },
     { image: { url: 'https://cdn.simpleicons.org/docker/2496ED' }, altText: 'Docker' },
     { image: { url: 'https://cdn.simpleicons.org/git/F05032' }, altText: 'Git' },

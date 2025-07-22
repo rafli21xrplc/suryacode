@@ -1,274 +1,204 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-import { CardBody, CardContainer, CardItem } from '../ui/3D-card';
+import React, { useState, useMemo } from 'react';
 
-gsap.registerPlugin(ScrollTrigger);
+type Category = 'Frontend' | 'Full-stack' | 'AI' | 'Mobile';
+const categories: Category[] = ['Frontend', 'Full-stack', 'AI', 'Mobile'];
 
-// Type definition remains the same
-type ExperienceItem = {
-    date: string;
+interface ExperienceItem {
+    id: string;
+    category: Category;
     role: string;
     company: string;
+    date: string;
     description: string[];
-    alignment: 'left' | 'right';
     labels: string[];
-    imageUrl?: string;
-};
+    imageUrl: string;
+}
 
-// Experience data remains the same
 const experiences: ExperienceItem[] = [
     {
+        id: 'cmlabs-frontend',
+        category: 'Frontend',
         date: 'Februari 2025 - Present',
         role: 'Frontend Engineer',
         company: 'cmlabs',
         description: [
-            'Built reusable components and pages using React.js and Next.js for 4 projects.',
-            'Translated Figma/design mockups into pixel-perfect, responsive interfaces with Tailwind CSS.',
-            'Enhanced Core Web Vitals (LCP, FID, CLS) for SEO-critical pages.',
+            'Built reusable components and pages using React.js and Next.js.',
+            'Translated Figma mockups into pixel-perfect, responsive interfaces.',
+            'Enhanced Core Web Vitals (LCP, FID, CLS) for SEO.',
         ],
-        alignment: 'right',
-        labels: ['React.js', 'Next.js', 'Tailwind CSS', 'Core Web Vitals', 'SEO', 'Frontend'],
-        imageUrl: 'https://placehold.co/600x400/1a202c/94a3b8?text=cmlabs+Project',
+        labels: ['React.js', 'Next.js', 'Tailwind CSS', 'Core Web Vitals', 'SEO'],
+        imageUrl: 'https://placehold.co/800x600/1e40af/ffffff?text=Frontend+Project',
     },
     {
+        id: 'brainwave-ai',
+        category: 'AI',
         date: 'Desember 2024 - Januari 2025',
-        role: 'AI/ Machine Learning',
+        role: 'AI/Machine Learning',
         company: 'Brainwave Matrix Solutions',
         description: [
             'Researched and implemented state-of-the-art ML algorithms.',
             'Preprocessed and analyzed large datasets using Pandas and Numpy.',
-            'Developed and optimized neural network models using TensorFlow and PyTorch.',
+            'Developed and optimized neural network models.',
         ],
-        alignment: 'left',
-        labels: ['Python', 'TensorFlow', 'PyTorch', 'Pandas', 'Numpy', 'Machine Learning'],
-        imageUrl: 'https://placehold.co/600x400/1a202c/94a3b8?text=AI/ML+Project',
+        labels: ['Python', 'TensorFlow', 'PyTorch', 'Pandas', 'Numpy'],
+        imageUrl: 'https://placehold.co/800x600/6d28d9/ffffff?text=AI/ML+Project',
     },
     {
+        id: 'gov-fullstack',
+        category: 'Full-stack',
         date: 'September 2024 - November 2024',
         role: 'Full-stack Developer',
-        company: 'Pekerja Lepas',
+        company: 'Freelance',
         description: [
-            'Developed a database management system for investment licensing for the East Java Provincial Government.',
+            'Developed a licensing management system for the East Java Gov.',
             'Architected and implemented a full-stack solution using Laravel.',
             'Automated over 86% of manual licensing processes.',
         ],
-        alignment: 'right',
-        labels: ['Laravel', 'PHP', 'MySQL', 'Full-stack', 'Government Tech'],
-        imageUrl: 'https://placehold.co/600x400/1a202c/94a3b8?text=Gov+Licensing+System',
+        labels: ['Laravel', 'PHP', 'MySQL', 'Full-stack', 'Gov-Tech'],
+        imageUrl: 'https://placehold.co/800x600/be123c/ffffff?text=Gov+System',
     },
     {
+        id: 'asik8-mobile',
+        category: 'Mobile',
         date: 'Juni 2024 - Agustus 2024',
         role: 'Android Developer',
-        company: 'Pekerja Lepas',
+        company: 'Freelance',
         description: [
-            'Developed a native Android application using Flutter for real-time attendance management.',
-            'Implemented secure API integration with an existing Laravel backend.',
-            'Reduced attendance processing time by over 90% through QR code scanning.',
+            'Developed a native Android app using Flutter for attendance.',
+            'Implemented secure API integration with a Laravel backend.',
+            'Reduced processing time by over 90% via QR code scanning.',
         ],
-        alignment: 'left',
-        labels: ['Flutter', 'Dart', 'Android', 'API Integration', 'Mobile Development'],
-        imageUrl: 'https://placehold.co/600x400/1a202c/94a3b8?text=ASIK+8+Android+App',
+        labels: ['Flutter', 'Dart', 'Android', 'API Integration', 'Mobile'],
+        imageUrl: 'https://placehold.co/800x600/047857/ffffff?text=Mobile+App',
     },
     {
+        id: 'asik8-fullstack',
+        category: 'Full-stack',
         date: 'Maret 2024 - Mei 2024',
         role: 'Full-stack Developer',
-        company: 'Pekerja Lepas',
+        company: 'Freelance',
         description: [
-            'Led full-stack development of a school management platform (ASIK 8) using Laravel.',
-            'Designed responsive UI/UX with role-based dashboards for admins, teachers, and students.',
+            'Led development of a school management platform (ASIK 8).',
+            'Designed responsive UI/UX with role-based dashboards.',
             'Built key modules covering 90% of school administrative needs.',
         ],
-        alignment: 'right',
         labels: ['Laravel', 'PHP', 'Full-stack', 'UI/UX', 'EdTech'],
-        imageUrl: 'https://placehold.co/600x400/1a202c/94a3b8?text=ASIK+8+Web+Platform',
+        imageUrl: 'https://placehold.co/800x600/b45309/ffffff?text=EdTech+Platform',
     },
     {
+        id: 'hummasoft-intern',
+        category: 'Full-stack',
         date: 'Juli 2023 - Desember 2023',
-        role: 'Intern Programmer Division',
+        role: 'Intern Programmer',
         company: 'CV Hummasoft Komputindo',
         description: [
-            'Developed and maintained backend systems for web applications using Laravel.',
+            'Developed and maintained backend systems using Laravel.',
             'Assisted in Android app development using Flutter.',
-            'Successfully built Website Play Music (MusiCave) and Management Operational Team Base On Office (HummaTask).',
+            'Built MusiCave (Music) and HummaTask (Task Management) apps.',
         ],
-        alignment: 'left',
         labels: ['Laravel', 'Flutter', 'PHP', 'Dart', 'Collaboration'],
-        imageUrl: 'https://placehold.co/600x400/1a202c/94a3b8?text=Hummasoft+Projects',
+        imageUrl: 'https://placehold.co/800x600/374151/ffffff?text=Internship+Projects',
     },
 ];
 
-// The MacbookFrame component remains the same
-const MacbookFrame = ({ imageUrl, altText }: { imageUrl: string; altText: string }) => {
-    return (
-        <div className="mt-5 rounded-lg border border-gray-700/50 bg-gray-900/50 p-2 shadow-2xl shadow-black/30">
-            <div className="mb-2 flex items-center gap-1.5">
-                <div className="h-2.5 w-2.5 rounded-full bg-red-500"></div>
-                <div className="h-2.5 w-2.5 rounded-full bg-yellow-500"></div>
-                <div className="h-2.5 w-2.5 rounded-full bg-green-500"></div>
-            </div>
-            <div className="overflow-hidden rounded-b-md">
-                <img
-                    src={imageUrl}
-                    alt={altText}
-                    className="w-full h-auto object-cover"
-                />
-            </div>
-        </div>
-    );
-};
+export const Experience = () => {
+    const [activeCategory, setActiveCategory] = useState<Category>('Frontend');
 
-// ## Refactored `ExperienceCard` for Responsiveness
-const ExperienceCard = ({ item, isMobile }: { item: ExperienceItem, isMobile: boolean }) => {
-    // On mobile, force alignment to the right for a consistent single-column layout
-    const alignment = isMobile ? 'right' : item.alignment;
-
-    const cardContent = (
-        <CardContainer containerClassName="py-0">
-            <CardBody className="bg-gray-800/40 backdrop-blur-lg w-auto h-auto rounded-lg shadow-lg border border-gray-700/50 p-6 relative group/card">
-                <CardItem translateZ="50" className="text-sm text-gray-400 mb-1">{item.date}</CardItem>
-                <CardItem translateZ="60" className="text-xl font-bold text-white">{item.role}</CardItem>
-                <CardItem translateZ="55" className="text-md text-gray-300 mb-4">{item.company}</CardItem>
-                
-                <CardItem translateZ="40">
-                    <ul className="list-disc list-inside space-y-2 text-gray-400">
-                        {item.description.map((point, index) => <li key={index}>{point}</li>)}
-                    </ul>
-                </CardItem>
-
-                <CardItem translateZ="30">
-                    <div className="mt-4 flex flex-wrap gap-2">
-                        {item.labels.map((label, index) => (
-                            <span key={index} className="bg-blue-900/60 text-blue-300 text-xs font-semibold px-3 py-1 rounded-full">
-                                {label}
-                            </span>
-                        ))}
-                    </div>
-                </CardItem>
-                
-                {item.imageUrl && (
-                    <CardItem translateZ="20" className="w-full">
-                        <MacbookFrame imageUrl={item.imageUrl} altText={`Project image for ${item.company}`} />
-                    </CardItem>
-                )}
-            </CardBody>
-        </CardContainer>
+    const activeExperiences = useMemo(
+        () => experiences.filter((p) => p.category === activeCategory),
+        [activeCategory]
     );
 
     return (
-        // The main container is now responsive
-        <div className="flex justify-between items-start w-full experience-card">
-            {/* Left Pane: Shows only on larger screens if alignment is 'left' */}
-            <div className="hidden md:block md:w-5/12">
-                {alignment === 'left' && cardContent}
-            </div>
-            
-            {/* Timeline Centerpiece */}
-            <div className="relative w-full md:w-1/12 flex justify-center">
-                <div className="h-4 w-4 bg-white rounded-full z-10 timeline-circle"></div>
-                {/* The vertical line is now part of the parent grid, not here. */}
+    <div className="bg-gray-50 text-gray-900 font-sans flex items-center justify-center min-h-screen p-4 md:p-8">
+        <div className="w-full max-w-7xl mx-auto">
+            <div className="mb-8 md:mb-12">
+                <p className="text-sm text-gray-500">MY EXPERTISE</p>
+                <h1 className="text-4xl md:text-5xl font-bold mt-1 text-black">
+                    Portfolio by Domain
+                </h1>
             </div>
 
-            {/* Right Pane: Shows for 'right' alignment on desktop, and for ALL cards on mobile */}
-            <div className="w-full md:w-5/12">
-                 {alignment === 'right' && cardContent}
-            </div>
-        </div>
-    );
-};
-
-// ## Refactored `Experience` Component
-const Experience = () => {
-    const sectionRef = useRef(null);
-    const [isExpanded, setIsExpanded] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
-
-    const visibleExperiences = isExpanded ? experiences : experiences.slice(0, 3);
-
-    // Effect for checking screen size
-    useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth < 768);
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-        return () => window.removeEventListener('resize', checkMobile);
-    }, []);
-    
-    // Effect for GSAP animations
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.to(".timeline-circle", {
-                scale: 1.5,
-                duration: 1,
-                repeat: -1,
-                yoyo: true,
-                ease: "power1.inOut",
-                stagger: 0.3
-            });
-
-            const cards = gsap.utils.toArray('.experience-card');
-            cards.forEach((card: any) => {
-                // Determine animation direction based on screen size and alignment
-                const isRightAligned = card.children[2]?.children.length > 0;
-                
-                gsap.from(card, {
-                    opacity: 0,
-                    // On mobile (single column), all cards slide in from the right
-                    // On desktop, they slide from left or right based on alignment
-                    x: isMobile ? 100 : (isRightAligned ? 100 : -100),
-                    duration: 0.8,
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: card,
-                        start: 'top 80%',
-                        end: 'bottom 20%',
-                        toggleActions: 'play none none reverse',
-                    },
-                });
-            });
-
-            ScrollTrigger.refresh();
-
-        }, sectionRef);
-
-        return () => ctx.revert();
-    }, [isExpanded, isMobile]);
-
-    return (
-        <section ref={sectionRef} className="text-white py-20 px-4 sm:px-6 lg:px-8 overflow-x-hidden">
-            <div className="container mx-auto">
-                <div className="text-center mb-16">
-                    <p className="text-sm font-semibold uppercase tracking-widest text-gray-400">WHAT I HAVE DONE SO FAR</p>
-                    <h2 className="text-4xl md:text-5xl font-bold mt-2">Work Experiences</h2>
-                </div>
-
-                {/* The main timeline container */}
-                <div className="relative">
-                    {/* The vertical timeline bar, now hidden on mobile */}
-                    <div className="absolute left-1/2 h-full w-0.5 bg-gray-700 transform -translate-x-1/2 hidden md:block"></div>
-                    
-                    {/* The container for the experience cards */}
-                    <div className="space-y-8 md:space-y-16">
-                        {visibleExperiences.map((exp, index) => (
-                            <ExperienceCard key={index} item={exp} isMobile={isMobile} />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+                <div className="flex flex-col justify-between space-y-8">
+                    <div className="space-y-4">
+                        {categories.map((category) => (
+                            <button
+                                key={category}
+                                onClick={() => setActiveCategory(category)}
+                                className={`flex items-center text-2xl md:text-3xl font-medium transition-all duration-300 group ${
+                                    activeCategory === category
+                                        ? 'text-blue-600'
+                                        : 'text-gray-400 hover:text-black'
+                                }`}
+                            >
+                                <span
+                                    className={`mr-4 transition-all duration-300 ${
+                                        activeCategory === category
+                                            ? 'opacity-100 text-blue-600'
+                                            : 'opacity-0 group-hover:opacity-100'
+                                    }`}
+                                >
+                                    →
+                                </span>
+                                {category.toUpperCase()}
+                            </button>
                         ))}
                     </div>
                 </div>
 
-                {experiences.length > 3 && (
-                    <div className="text-center mt-16">
-                        <button
-                            onClick={() => setIsExpanded(!isExpanded)}
-                            className="bg-gray-800/60 backdrop-blur-lg text-white font-semibold py-3 px-8 rounded-lg border border-gray-700/50 hover:bg-gray-700/60 transition-all duration-300"
-                        >
-                            {isExpanded ? 'View Less' : 'View More'}
-                        </button>
-                    </div>
-                )}
+                <div className="flex flex-col gap-y-12 md:gap-y-16">
+                    {activeExperiences.length > 0 ? (
+                        activeExperiences.map((item) => (
+                            <div key={item.id} className="flex flex-col gap-8">
+                                <div className="relative w-full h-80 rounded-lg overflow-hidden flex-shrink-0 shadow-lg">
+                                    <img
+                                        src={item.imageUrl}
+                                        alt={item.role}
+                                        className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute bottom-4 left-4 text-left p-2">
+                                        <h2 className="text-3xl font-bold text-white [text-shadow:0_2px_4px_rgba(0,0,0,0.5)]">{item.role}</h2>
+                                        <p className="text-gray-200 [text-shadow:0_1px_3px_rgba(0,0,0,0.5)]">{item.company}</p>
+                                    </div>
+                                </div>
+                                <div className="w-full flex flex-col justify-between self-stretch">
+                                    <div>
+                                        <div className="mb-6">
+                                            <h3 className="text-sm text-gray-500 mb-3 tracking-wider uppercase">KEY CONTRIBUTIONS</h3>
+                                            <ul className="list-disc list-inside space-y-2 text-gray-600">
+                                                {item.description.map(desc => <li key={desc}>{desc}</li>)}
+                                            </ul>
+                                        </div>
+                                        <div className="mb-6">
+                                            <h3 className="text-sm text-gray-500 mb-3 tracking-wider uppercase">TECHNOLOGIES USED</h3>
+                                            <div className="flex flex-wrap gap-2">
+                                                {item.labels.map((label) => (
+                                                    <span
+                                                        key={label}
+                                                        className="text-xs text-gray-700 bg-gray-100 border border-gray-300 rounded-full py-1 px-3"
+                                                    >
+                                                        {label}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm text-gray-500 mb-2 tracking-wider uppercase">DATE</h3>
+                                            <p className="font-semibold text-gray-800">{item.date}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-gray-500">No projects found in this category.</p>
+                    )}
+                </div>
             </div>
-        </section>
+        </div>
+        </div>
     );
 };
-
-export default Experience;
