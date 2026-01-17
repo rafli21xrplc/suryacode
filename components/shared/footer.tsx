@@ -26,7 +26,7 @@ export function Footer() {
             revealText={
               <p className="mx-auto max-w-4xl text-center text-2xl font-bold md:text-4xl">
                 My track record in process optimization has proven successful in
-                increasing team efficiency by 20%. I'm confident I can apply
+                increasing team efficiency. I'm confident I can apply
                 this strategic expertise to boost productivity and support your
                 growth goals.
               </p>
